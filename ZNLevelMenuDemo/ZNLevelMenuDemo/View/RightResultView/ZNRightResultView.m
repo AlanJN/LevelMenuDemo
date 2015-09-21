@@ -31,7 +31,6 @@
     return self;
 }
 
-
 #pragma mark - setter
 
 - (void)setFoodsArray:(NSArray *)foodsArray {
@@ -47,21 +46,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     MenuResultCell * cell = [MenuResultCell cellForTableView:tableView];
+    
+    cell.ChangeFoodBlock = ^(DataModel * foodModel,UIButton * button,FoodStatus status){
+        if ([_foodViewDelegate respondsToSelector:@selector(foodCellChangeFoodModel:button:changeStatus:)]) {
+            [self.foodViewDelegate foodCellChangeFoodModel:foodModel button:button changeStatus:status];
+        }
+    };
+    
     cell.cellData = self.foodsArray[indexPath.row];
-    cell.delegate = self;
     return cell;
 }
-
-#pragma mark - UITableViewDelegate
-
-#pragma mark - MenuResultCellDelegate
-
-- (void)tableViewCell:(MenuResultCell *)cell addButtonClick:(UIButton *)button{
-    if ([_foodViewDelegate respondsToSelector:@selector(foodCell:addFood:)]) {
-        [self.foodViewDelegate foodCell:cell addFood:button];
-    }
-    
-}
-
 
 @end

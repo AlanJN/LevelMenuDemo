@@ -8,6 +8,8 @@
 		<key>foods</key>
 		<array>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10001</string>
 				<key>image</key>
@@ -20,6 +22,8 @@
 				<string>盐酥鸡块</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10002</string>
 				<key>image</key>
@@ -32,6 +36,8 @@
 				<string>木耳</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10003</string>
 				<key>image</key>
@@ -44,6 +50,8 @@
 				<string>鸭胗</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10004</string>
 				<key>image</key>
@@ -56,6 +64,8 @@
 				<string>烤肉饭01</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10005</string>
 				<key>image</key>
@@ -68,6 +78,8 @@
 				<string>豆腐干</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10006</string>
 				<key>image</key>
@@ -80,6 +92,8 @@
 				<string>煎蛋</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>10007</string>
 				<key>image</key>
@@ -99,6 +113,8 @@
 		<key>foods</key>
 		<array>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20001</string>
 				<key>image</key>
@@ -111,6 +127,8 @@
 				<string>盖浇饭01</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20002</string>
 				<key>image</key>
@@ -123,6 +141,8 @@
 				<string>米饭</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20003</string>
 				<key>image</key>
@@ -135,6 +155,8 @@
 				<string>盖浇饭03</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20004</string>
 				<key>image</key>
@@ -147,6 +169,8 @@
 				<string>盖浇饭05</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20005</string>
 				<key>image</key>
@@ -159,6 +183,8 @@
 				<string>盖浇饭06</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>20006</string>
 				<key>image</key>
@@ -178,6 +204,8 @@
 		<key>foods</key>
 		<array>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>30001</string>
 				<key>image</key>
@@ -190,6 +218,8 @@
 				<string>面01</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>30002</string>
 				<key>image</key>
@@ -202,18 +232,22 @@
 				<string>面02</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>30003</string>
 				<key>image</key>
 				<string>mian_03</string>
 				<key>salesNum</key>
-				<string>0</string>
+				<string>1</string>
 				<key>price</key>
 				<string>20</string>
 				<key>name</key>
 				<string>面03</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>30004</string>
 				<key>image</key>
@@ -226,6 +260,8 @@
 				<string>面04</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>30005</string>
 				<key>image</key>
@@ -245,6 +281,8 @@
 		<key>foods</key>
 		<array>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40001</string>
 				<key>image</key>
@@ -257,6 +295,8 @@
 				<string>披萨01</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40002</string>
 				<key>image</key>
@@ -269,18 +309,22 @@
 				<string>披萨02</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40003</string>
 				<key>image</key>
 				<string>pizza_03</string>
 				<key>salesNum</key>
-				<string>0</string>
+				<string>5</string>
 				<key>price</key>
 				<string>7.00</string>
 				<key>name</key>
 				<string>披萨03</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40004</string>
 				<key>image</key>
@@ -293,6 +337,8 @@
 				<string>披萨04</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40005</string>
 				<key>image</key>
@@ -305,6 +351,8 @@
 				<string>披萨05</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40006</string>
 				<key>image</key>
@@ -317,6 +365,8 @@
 				<string>披萨06</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40007</string>
 				<key>image</key>
@@ -329,6 +379,8 @@
 				<string>披萨07</string>
 			</dict>
 			<dict>
+				<key>currentNum</key>
+				<string>0</string>
 				<key>foodId</key>
 				<string>40008</string>
 				<key>image</key>

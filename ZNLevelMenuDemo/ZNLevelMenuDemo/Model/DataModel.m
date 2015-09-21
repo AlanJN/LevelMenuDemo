@@ -21,7 +21,7 @@
         model.salesNum = dic[@"salesNum"];
         model.foodPrice = dic[@"price"];
         model.foodId = dic[@"foodId"];
-        
+        model.currentNum = dic[@"currentNum"];
         return model;
     }
     

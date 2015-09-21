@@ -15,7 +15,7 @@
 @property (nonatomic ,strong) NSString * foodName;              //名字
 @property (nonatomic ,strong) NSString * salesNum;              //销量
 @property (nonatomic ,strong) NSString * foodPrice;             //价格
-
+@property (nonatomic ,strong) NSString * currentNum;            //当前个数
 +(DataModel *)getDataFromDictionary:(NSDictionary *)dic;
 
 @end

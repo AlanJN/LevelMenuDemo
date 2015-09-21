@@ -19,12 +19,20 @@
 @property (nonatomic ,strong) ZNRightResultView * rightResultView;          //右侧食物
 @property (nonatomic ,strong) NSMutableArray * menuArray;                   //数据源
 @property (nonatomic ,strong) UIImageView * shoppingCart;                   //购物车
+@property (nonatomic ,strong) UIView * bottomView;                          //底部view
+@property (nonatomic ,strong) UIView * buttonView;                          //用来确定加号按钮的view
+@property (nonatomic ,strong) UILabel * cartNumberLabel;                    //购物车数量
+@property (nonatomic ,strong) UILabel * cartTotalPriceLabel;                //购物车总价
 
+@property (nonatomic ,strong) DataModel * currentModel;                     //当前正在加入购物的食物的Model
+@property (nonatomic ,assign) int totalNumber;                              //数量
+@property (nonatomic ,assign) float totalPrice;                             //总价
 
 @end
 
 @implementation ZNViewController
 
+#pragma mark - Lazy Loading
 
 - (NSMutableArray *)menuArray{
     
@@ -33,6 +41,8 @@
     }
     return _menuArray;
 }
+
+#pragma mark -
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,19 +63,34 @@
     self.rightResultView.foodViewDelegate = self;
     [self.view addSubview:self.rightResultView];
     
-    UIView *bottomView =[[UIView alloc]initWithFrame:(CGRect){0,kScreenHeight-50.f-64.f,kScreenWidth,50}];
-    bottomView.backgroundColor = ColorRGBA(136, 136, 136, 1);
-    [self.view addSubview:bottomView];
+    _bottomView =[[UIView alloc]initWithFrame:(CGRect){0,kScreenHeight-50.f-64.f,kScreenWidth,50}];
+    self.bottomView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.bottomView];
     
     _shoppingCart = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 32, 32)];
     self.shoppingCart.image = [UIImage imageNamed:@"shoppingCart"];
-    [bottomView addSubview:self.shoppingCart];
+    [self.bottomView addSubview:self.shoppingCart];
+    
+    _cartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.shoppingCart.frame)-8, CGRectGetMinY(self.shoppingCart.frame)-3, 15, 15)];
+    self.cartNumberLabel.backgroundColor = [UIColor whiteColor];
+    self.cartNumberLabel.textAlignment = NSTextAlignmentCenter;
+    self.cartNumberLabel.font = [UIFont systemFontOfSize:8.f];
+    self.cartNumberLabel.textColor = [UIColor redColor];
+    self.cartNumberLabel.layer.cornerRadius = 7.5f;
+    self.cartNumberLabel.layer.borderWidth = 0.5;
+    self.cartNumberLabel.hidden = YES;
+    self.cartNumberLabel.layer.borderColor = [UIColor redColor].CGColor;
+    [self.bottomView addSubview:self.cartNumberLabel];
+    
+    _cartTotalPriceLabel =[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.shoppingCart.frame)+20, 5, 150, 40)];
+    self.cartTotalPriceLabel.textColor=[UIColor redColor];
+    self.cartTotalPriceLabel.font = [UIFont systemFontOfSize:14.f];
+    [self.bottomView addSubview:self.cartTotalPriceLabel];
     
     [self setData];
 }
 
-#pragma mark - 初始化数据
-
+//初始化数据
 - (void)setData{
     
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"DataPlist" ofType:@"plist"];
@@ -87,6 +112,11 @@
     
     self.leftNavView.menuArray = self.menuArray;
     [self.leftNavView reloadData];
+    
+    _totalNumber = 0;
+    _totalPrice = 0;
+    self.cartNumberLabel.text = [NSString stringWithFormat:@"%d",self.totalNumber];
+    self.cartTotalPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",self.totalPrice];
 }
 
 #pragma mark - ZNLeftNavViewDelegate
@@ -98,49 +128,126 @@
 
 #pragma mark - ZNRightResultViewDelegate
 
-- (void)foodCell:(MenuResultCell *)cell addFood:(UIButton *)button{
+- (void)foodCellChangeFoodModel:(DataModel *)model button:(UIButton *)button changeStatus:(FoodStatus)status{
     
-    //结束点
-    CGPoint endpoint = [self.view convertPoint:self.shoppingCart.center fromView:self.shoppingCart.superview];
+    _currentModel = model;
+    switch (status) {
+        case FoodStatusAdd:
+        {
+            [self addFoodAnimationWithModel:model button:button];
+        }
+            break;
+         case FoodStatusMinus:
+        {
+            [self minusFood];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+//增加食物的动画
+- (void)addFoodAnimationWithModel:(DataModel *)model button:(UIButton *)button{
+    if (!_buttonView) {
+        _buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        self.buttonView.hidden = YES;
+    }
+    self.buttonView.center = button.center;
     
-    //出发点
-    CGPoint startPoint = [self.view convertPoint:button.center fromView:cell.contentView];
+    //创建运动Layer
+    CALayer * transLayer = [[CALayer alloc] init];
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    transLayer.opacity = 1.0;
+    transLayer.backgroundColor = [UIColor redColor].CGColor;
+    transLayer.frame = self.buttonView.frame;
+    transLayer.cornerRadius = 5;
     
-    UIView * redView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
-    redView.backgroundColor = [UIColor redColor];
-    redView.layer.cornerRadius = 5.f;
-    redView.layer.masksToBounds = YES;
-    redView.hidden = NO;
-    redView.center = button.center;
+    /*  如果需要运动的是图片 只需将 buttonView 变为UIImageView 并执行以下代码
+     transLayer.contents = self.buttonView.layer.contents;
+     */
     
-    //
-    CALayer * layer = [CALayer layer];
-    layer.contents = redView.layer.contents;
-    layer.frame = redView.frame;
-    layer.opacity = 1;
-    [self.view.layer addSublayer:layer];
+    [self.view.layer addSublayer:transLayer];
+    [CATransaction commit];
     
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:startPoint];
-    //贝塞尔曲线路径
-    float sx = startPoint.x;
-    float sy = startPoint.y;
-    float ex = endpoint.x;
-    float ey = endpoint.y;
-    float x = sx + (ex - sx) / 3;
-    float y = sy + (ey - sy) * 0.5 - 400;
-//    CGPoint centerPoint=CGPointMake(x, y);
-//    [path addQuadCurveToPoint:endpoint controlPoint:centerPoint];
-//    CAKeyframeAnimation * animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-//    animation.path = path.CGPath;
-//    animation.removedOnCompletion = NO;
-//    animation.fillMode = kCAFillModeForwards;
-//    animation.duration = 0.8;
-//    animation.delegate = self;
-//    animation.autoreverses = NO;
-//    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-//    [layer addAnimation:animation forKey:@"buy"];
+    //路径曲线
+    UIBezierPath * movePath = [UIBezierPath bezierPath];
     
+    //终点
+    CGPoint endPoint = [self.view convertPoint:self.shoppingCart.center fromView:self.bottomView];
+    
+    //起点
+    
+    CGPoint startPoint = [self.view convertPoint:button.center fromView:button.superview];
+    
+    [movePath moveToPoint:startPoint];
+    
+    //终点是购物车  控制贝塞尔曲线的 控制点
+    [movePath addQuadCurveToPoint:endPoint
+                     controlPoint:CGPointMake(50,startPoint.y)];
+    //关键帧
+    CAKeyframeAnimation *positionAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    positionAnimation.path = movePath.CGPath;
+    positionAnimation.removedOnCompletion = YES;
+    
+    CAAnimationGroup * group = [CAAnimationGroup animation];
+    group.beginTime = CACurrentMediaTime();
+    group.duration = 0.7;
+    group.animations = [NSArray arrayWithObjects:positionAnimation,nil];
+    group.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    group.delegate = self;
+    group.fillMode = kCAFillModeForwards;
+    group.removedOnCompletion = NO;
+    group.autoreverses = NO;
+    [transLayer addAnimation:group forKey:@"opacity"];
+    
+    [self performSelector:@selector(addFoodFnished:) withObject:transLayer afterDelay:0.6];
+}
+
+- (void)minusFood{
+    
+    self.totalNumber -= 1;
+    
+    [self calculateTotalPrice:self.cartTotalPriceLabel.text status:FoodStatusMinus];
+    
+    if (self.totalNumber <= 0) {
+        self.cartNumberLabel.hidden = YES;
+        self.totalNumber = 0;
+        return;
+    }
+    
+    self.cartNumberLabel.hidden = NO;
+    self.cartNumberLabel.text = [NSString stringWithFormat:@"%d",self.totalNumber];
+}
+
+#pragma mark - 添加食物完成
+
+- (void)addFoodFnished:(CALayer *)layer{
+    //移除并释放layer
+    [layer removeFromSuperlayer];
+    layer = nil;
+    
+    self.totalNumber += 1;
+    self.cartNumberLabel.hidden = NO;
+    self.cartNumberLabel.text = [NSString stringWithFormat:@"%d",self.totalNumber];
+    
+    [self calculateTotalPrice:self.cartTotalPriceLabel.text status:FoodStatusAdd];
+}
+
+- (void)calculateTotalPrice:(NSString *)currentPrice status:(FoodStatus)status{
+    
+    //分离一下字符串
+    NSString * price = [currentPrice substringFromIndex:1];
+    self.totalPrice = [price floatValue];
+    
+    if (status == FoodStatusAdd) {
+        self.totalPrice += [self.currentModel.foodPrice floatValue];
+    }else{
+        self.totalPrice -= [self.currentModel.foodPrice floatValue];
+    }
+    
+    self.cartTotalPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",self.totalPrice];
 }
 
 #pragma mark -

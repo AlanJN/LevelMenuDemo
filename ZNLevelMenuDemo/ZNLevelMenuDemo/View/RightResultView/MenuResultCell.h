@@ -10,15 +10,20 @@
 
 @class DataModel,MenuResultCell;
 
+typedef NS_ENUM(NSInteger, FoodStatus){
+    FoodStatusAdd = 1,
+    FoodStatusMinus = 2,
+};
+
 @protocol MenuResultCellDelegate <NSObject>
 
-- (void)tableViewCell:(MenuResultCell *)cell addButtonClick:(UIButton *)button;
 @end
 
 @interface MenuResultCell : UITableViewCell
 
 @property (nonatomic ,strong) DataModel * cellData;
 @property (nonatomic ,weak) id<MenuResultCellDelegate>delegate;
+@property (nonatomic ,copy) void (^ChangeFoodBlock)(DataModel * model,UIButton * button,FoodStatus status);
 
 /**
  *  类方法 初始化Cell

@@ -7,13 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MenuResultCell.h"
 
-@class MenuResultCell;
+@class DataModel;
 
 @protocol ZNRightResultViewDelegate <NSObject>
 
-- (void)foodCell:(MenuResultCell *)cell addFood:(UIButton *)button;
-
+/**
+ *  增删食物数量
+ *
+ *  @param model  食物Model
+ *  @param button 增减按钮
+ */
+- (void)foodCellChangeFoodModel:(DataModel *) model button:(UIButton *)button changeStatus:(FoodStatus)status;
 @end
 
 @interface ZNRightResultView : UITableView

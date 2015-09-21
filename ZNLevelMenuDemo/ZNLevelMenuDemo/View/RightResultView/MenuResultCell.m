@@ -74,14 +74,14 @@ static const CGFloat cellHeight = 130.f;
     self.currentNumberLabel.backgroundColor = [UIColor clearColor];
     self.currentNumberLabel.textColor = [UIColor blackColor];
     self.currentNumberLabel.font = [UIFont systemFontOfSize:12.f];
-    self.currentNumberLabel.text = @"0";
+    self.currentNumberLabel.hidden = NO;
     [self.contentView addSubview:self.currentNumberLabel];
     
     _minusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.minusButton.frame = CGRectMake(CGRectGetMinX(self.currentNumberLabel.frame)-40, CGRectGetMinY(self.addButton.frame), 32, 32);
     [self.minusButton setImage:[UIImage imageNamed:@"minusImage"] forState:UIControlStateNormal];
+    [self.minusButton addTarget:self action:@selector(minusFoodFromCart:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.minusButton];
-    
     
     //分割线
     UIView * dividingLine = [[UIView alloc] initWithFrame:CGRectMake(10, cellHeight-0.5, kCellWidth-20, 0.5)];
@@ -95,6 +95,7 @@ static const CGFloat cellHeight = 130.f;
     _cellData = cellData;
     self.foodLogoImage.image = [UIImage imageNamed:_cellData.imageName];
     self.foodTitleLabel.text = _cellData.foodName;
+    self.currentNumberLabel.text = [NSString stringWithFormat:@"%@",_cellData.currentNum];
     self.foodPriceLabel.text = [NSString stringWithFormat:@"￥%@",_cellData.foodPrice];
     if ([_cellData.salesNum integerValue] != 0) {
         self.salesNumberLabel.hidden = NO;
@@ -107,8 +108,38 @@ static const CGFloat cellHeight = 130.f;
 #pragma mark - 
 
 - (void)addFoodToCart:(UIButton *)button{
-    if ([_delegate respondsToSelector:@selector(tableViewCell:addButtonClick:)]) {
-        [self.delegate tableViewCell:self addButtonClick:button];
+    
+    int numberSales =[self.currentNumberLabel.text intValue];
+    //最多99个
+    if (numberSales == 99) {
+        return;
+    }
+    numberSales++;
+    
+    self.currentNumberLabel.text = [NSString stringWithFormat:@"%d",numberSales];
+
+    self.cellData.currentNum = self.currentNumberLabel.text;
+    
+    _ChangeFoodBlock(self.cellData,button,FoodStatusAdd);
+}
+
+- (void)minusFoodFromCart:(UIButton *)button{
+    
+    int numberSales =[self.currentNumberLabel.text intValue];
+    //最少1个
+    if (numberSales == 0) {
+        return;
+    }
+    numberSales--;
+    self.currentNumberLabel.text = [NSString stringWithFormat:@"%d",numberSales];
+    
+    self.cellData.currentNum = self.currentNumberLabel.text;
+    
+    _ChangeFoodBlock(self.cellData,button,FoodStatusMinus);
+
+    if (numberSales == 0) {
+        
+        return;
     }
 }
 
