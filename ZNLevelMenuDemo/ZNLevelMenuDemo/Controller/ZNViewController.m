@@ -235,6 +235,7 @@
     [self calculateTotalPrice:self.cartTotalPriceLabel.text status:FoodStatusAdd];
 }
 
+//计算价格
 - (void)calculateTotalPrice:(NSString *)currentPrice status:(FoodStatus)status{
     
     //分离一下字符串
